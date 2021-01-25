@@ -148,6 +148,11 @@ namespace Microcharts
         /// </summary>
         public SKPaint YAxisLinesPaint { get; set; }
 
+        /// <summary>
+        /// X axis with datetime scale
+        /// </summary>
+        public bool IsXAxisDateTimeFormat { get; set; }
+
         #endregion
 
         #region Methods
@@ -184,6 +189,7 @@ namespace Microcharts
                 var headerWithLegendHeight = headerHeight + (LegendOption == SeriesLegendOption.Top ? legendHeight : 0);
 
                 var itemSize = CalculateItemSize(nbItems, width, height, footerHeight + headerHeight + legendHeight);
+
                 var barSize = CalculateBarSize(itemSize, Series.Count());
                 var origin = CalculateYOrigin(itemSize.Height, headerWithLegendHeight);
                 DrawHelper.DrawYAxis(ShowYAxisText, ShowYAxisLines, YAxisPosition, YAxisTextPaint, YAxisLinesPaint, Margin, AnimationProgress, MaxValue, ValueRange, canvas, width, yAxisXShift, yAxisIntervalLabels, headerHeight, itemSize, origin);
@@ -193,6 +199,7 @@ namespace Microcharts
                 {
                     string label = labels[i];
                     SKRect labelSize = labelSizes[i];
+                    var countGood = CalculateCountGood(width, height,labelSize);
 
                     var itemX = Margin + (itemSize.Width / 2) + (i * (itemSize.Width + Margin));
 
@@ -218,6 +225,8 @@ namespace Microcharts
                 OnDrawContentEnd(canvas, itemSize, origin, valueLabelSizes);
             }
         }
+
+
 
         /// <summary>
         /// Calculate the header height to take care of the value label size display
@@ -450,6 +459,11 @@ namespace Microcharts
             var w = (width - ((items + 1) * Margin)) / items;
             var h = height - Margin - reservedSpace;
             return new SKSize(w, h);
+        }
+
+        private int CalculateCountGood(int width, int height, SKRect labelSize)
+        {
+            return (int) ((width - Margin) / (labelSize.Width + Margin));
         }
 
         #endregion

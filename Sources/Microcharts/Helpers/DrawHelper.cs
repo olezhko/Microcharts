@@ -14,6 +14,7 @@ namespace Microcharts
             {
                 using (var paint = new SKPaint())
                 {
+                    bool isTextBig = false;
                     paint.TextSize = textSize;
                     paint.IsAntialias = true;
                     paint.Color = color;
@@ -36,13 +37,15 @@ namespace Microcharts
                     {
                         if (bounds.Width > itemSize.Width)
                         {
-                            text = text.Substring(0, Math.Min(3, text.Length));
+                            //text = text.Substring(0, Math.Min(3, text.Length));
+                            isTextBig = true;
                             paint.MeasureText(text, ref bounds);
                         }
 
                         if (bounds.Width > itemSize.Width)
                         {
-                            text = text.Substring(0, Math.Min(1, text.Length));
+                            //text = text.Substring(0, Math.Min(1, text.Length));
+                            isTextBig = true;
                             paint.MeasureText(text, ref bounds);
                         }
 
@@ -56,7 +59,10 @@ namespace Microcharts
                         canvas.Translate(point.X - (bounds.Width / 2), y);
                     }
 
-                    canvas.DrawText(text, 0, 0, paint);
+                    //if (!isTextBig)
+                    {
+                        canvas.DrawText(text, 0, 0, paint);
+                    }
                 }
             }
         }
