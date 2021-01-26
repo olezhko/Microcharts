@@ -195,11 +195,20 @@ namespace Microcharts
                 DrawHelper.DrawYAxis(ShowYAxisText, ShowYAxisLines, YAxisPosition, YAxisTextPaint, YAxisLinesPaint, Margin, AnimationProgress, MaxValue, ValueRange, canvas, width, yAxisXShift, yAxisIntervalLabels, headerHeight, itemSize, origin);
 
                 int nbSeries = series.Count();
+                int limitIndex = 0;
                 for (int i = 0; i < labels.Length; i++)
                 {
                     string label = labels[i];
                     SKRect labelSize = labelSizes[i];
+
                     var countGood = CalculateCountGood(width, height,labelSize);
+                    var limit = (int)Math.Round(labels.Length / (double)countGood, MidpointRounding.ToEven);
+                    if (limitIndex == 0)
+                    {
+                        limitIndex = limit;
+                    }
+
+
 
                     var itemX = Margin + (itemSize.Width / 2) + (i * (itemSize.Width + Margin));
 
@@ -218,7 +227,12 @@ namespace Microcharts
                         DrawValueLabel(canvas, valueLabelSizes, headerWithLegendHeight, itemSize, barSize, entry, barX, barY, itemX);
                     }
 
-                    DrawHelper.DrawLabel(canvas, LabelOrientation, false, itemSize, new SKPoint(itemX, height - footerWithLegendHeight + Margin), LabelColor, labelSize, label, LabelTextSize, Typeface);
+                    if (limitIndex == limit)
+                    {
+                        DrawHelper.DrawLabel(canvas, LabelOrientation, false, itemSize, new SKPoint(itemX, height - footerWithLegendHeight + Margin), LabelColor, labelSize, label, LabelTextSize, Typeface);
+                    }
+
+                    limitIndex--;
                 }
 
                 DrawLegend(canvas, seriesSizes, legendHeight, height, width);
