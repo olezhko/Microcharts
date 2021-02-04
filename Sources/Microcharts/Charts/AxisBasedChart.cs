@@ -201,14 +201,12 @@ namespace Microcharts
                     string label = labels[i];
                     SKRect labelSize = labelSizes[i];
 
-                    var countGood = CalculateCountGood(width, height,labelSize);
+                    var countGood = CalculateCountGood(width, height, labelSize);
                     var limit = (int)Math.Round(labels.Length / (double)countGood, MidpointRounding.ToEven);
                     if (limitIndex == 0)
                     {
                         limitIndex = limit;
                     }
-
-
 
                     var itemX = Margin + (itemSize.Width / 2) + (i * (itemSize.Width + Margin));
 
@@ -227,7 +225,14 @@ namespace Microcharts
                         DrawValueLabel(canvas, valueLabelSizes, headerWithLegendHeight, itemSize, barSize, entry, barX, barY, itemX);
                     }
 
-                    if (limitIndex == limit)
+                    if (limit < labels.Length)
+                    {
+                        if (limitIndex == limit)
+                        {
+                            DrawHelper.DrawLabel(canvas, LabelOrientation, false, itemSize, new SKPoint(itemX, height - footerWithLegendHeight + Margin), LabelColor, labelSize, label, LabelTextSize, Typeface);
+                        }
+                    }
+                    else
                     {
                         DrawHelper.DrawLabel(canvas, LabelOrientation, false, itemSize, new SKPoint(itemX, height - footerWithLegendHeight + Margin), LabelColor, labelSize, label, LabelTextSize, Typeface);
                     }
